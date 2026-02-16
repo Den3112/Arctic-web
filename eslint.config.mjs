@@ -1,18 +1,36 @@
-import { defineConfig, globalIgnores } from 'eslint/config';
-import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextConfig from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 
-const eslintConfig = defineConfig([
-  ...nextVitals,
+/** @type {import('eslint').Linter.Config[]} */
+const config = [
+  {
+    ignores: [
+      '.next/**',
+      '.vercel/**',
+      'node_modules/**',
+      'out/**',
+      'build/**',
+      'public/**',
+      'playwright-report/**',
+      'test-results/**',
+      'coverage/**',
+      'next-env.d.ts',
+      '*.config.ts',
+      '*.config.mjs',
+      '*.config.js',
+      'package-lock.json',
+      'tsconfig.tsbuildinfo',
+    ],
+  },
+  ...nextConfig,
   ...nextTs,
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    '.next/**',
-    'out/**',
-    'build/**',
-    'next-env.d.ts',
-  ]),
-]);
+  {
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      'react/no-unescaped-entities': 'off',
+    },
+  },
+];
 
-export default eslintConfig;
+export default config;

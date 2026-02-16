@@ -125,7 +125,7 @@ export const uk = {
     thisMonth: 'За місяць',
     totalTime: 'Загальний час',
     totalTasks: 'Всього задач',
-    entriesCount: 'Записів за період',
+    avgTimePerTask: 'Сер. час на задачу',
     timeDistribution: 'Розподіл часу',
     timeByProject: 'Час за проєктами',
     completedTasks: 'Завершені задачі',

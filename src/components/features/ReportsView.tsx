@@ -184,43 +184,56 @@ export function ReportsView({ entries }: ReportsViewProps) {
     URL.revokeObjectURL(url); // Clean up
   };
 
+  const avgTimePerTask = useMemo(() => {
+    if (filteredEntries.length === 0) return 0;
+    return totalTime / filteredEntries.length;
+  }, [totalTime, filteredEntries.length]);
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="space-y-8"
+      className="space-y-6"
     >
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div></div>
-
-        <div className="flex items-center gap-3 w-full md:w-auto ml-auto">
-          <Select
-            value={period}
-            onValueChange={(val: 'day' | 'week' | 'month') => setPeriod(val)}
-          >
-            <SelectTrigger className="w-[180px] glass-card">
-              <Calendar className="w-4 h-4 mr-2" />
-              <SelectValue placeholder={t.reports.periodSelector} />
-            </SelectTrigger>
-            <SelectContent className="glass-card">
-              <SelectItem value="day">{t.reports.today}</SelectItem>
-              <SelectItem value="week">{t.reports.thisWeek}</SelectItem>
-              <SelectItem value="month">{t.reports.thisMonth}</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Button
-            variant="outline"
-            onClick={exportToCSV}
-            disabled={filteredEntries.length === 0}
-            className="glass-card hover:bg-white/5"
-          >
-            <Download className="w-4 h-4 mr-2" /> {t.reports.exportCsv}
-          </Button>
-        </div>
+      {/* Page Header */}
+      <div>
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight premium-gradient-text uppercase">
+          {t.reports.header}
+        </h1>
+        <p className="text-muted-foreground mt-1 text-sm md:text-base">
+          {t.reports.subHeader}
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Row 1: Controls */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-end gap-3">
+        <Select
+          value={period}
+          onValueChange={(val: 'day' | 'week' | 'month') => setPeriod(val)}
+        >
+          <SelectTrigger className="w-[180px] glass-card">
+            <Calendar className="w-4 h-4 mr-2" />
+            <SelectValue placeholder={t.reports.periodSelector} />
+          </SelectTrigger>
+          <SelectContent className="glass-card">
+            <SelectItem value="day">{t.reports.today}</SelectItem>
+            <SelectItem value="week">{t.reports.thisWeek}</SelectItem>
+            <SelectItem value="month">{t.reports.thisMonth}</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Button
+          variant="outline"
+          onClick={exportToCSV}
+          disabled={filteredEntries.length === 0}
+          className="glass-card hover:bg-white/5"
+        >
+          <Download className="w-4 h-4 mr-2" /> {t.reports.exportCsv}
+        </Button>
+      </div>
+
+      {/* Row 2: Summary Cards — 3 equal columns */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <Card className="glass-card border-none overflow-hidden group hover:bg-white/5 transition-all">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
@@ -229,13 +242,13 @@ export function ReportsView({ entries }: ReportsViewProps) {
             <Clock className="h-4 w-4 text-primary animate-pulse" />
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-mono font-bold premium-gradient-text">
+            <div className="text-3xl lg:text-4xl font-mono font-bold premium-gradient-text">
               {formatDuration(totalTime)}
             </div>
             <p className="text-xs text-muted-foreground mt-2">
               {filteredEntries.length > 0
-                ? `${chartData.length} active ${chartData.length === 1 ? 'project' : 'projects'}`
-                : 'No activity recorded'}
+                ? `${chartData.length} ${chartData.length === 1 ? 'project' : 'projects'}`
+                : t.common.noData}
             </p>
           </CardContent>
         </Card>
@@ -248,85 +261,107 @@ export function ReportsView({ entries }: ReportsViewProps) {
             <CheckCircle2 className="h-4 w-4 text-primary/60" />
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-bold">{filteredEntries.length}</div>
+            <div className="text-3xl lg:text-4xl font-bold">
+              {filteredEntries.length}
+            </div>
             <p className="text-xs text-muted-foreground mt-2">
               {t.reports.completedTasks}
             </p>
           </CardContent>
         </Card>
 
-        <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <ReportsBarChart data={chartData} />
-          <ReportsPieChart data={chartData} totalTime={totalTime} />
-        </div>
-
-        {/* Detailed Table */}
-        <Card className="glass-card border-none overflow-hidden rounded-3xl col-span-1 md:col-span-2 lg:col-span-2">
-          <div className="overflow-x-auto max-h-[400px]">
-            <table className="w-full text-sm text-left">
-              <thead className="text-xs uppercase bg-white/5 text-muted-foreground sticky top-0 z-10 backdrop-blur-md">
-                <tr>
-                  <th className="px-6 py-4 tracking-widest">
-                    {t.reports.table.date}
-                  </th>
-                  <th className="px-6 py-4 tracking-widest">
-                    {t.reports.table.task}
-                  </th>
-                  <th className="px-6 py-4 tracking-widest">
-                    {t.reports.table.project}
-                  </th>
-                  <th className="px-6 py-4 text-right tracking-widest">
-                    {t.reports.table.duration}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {filteredEntries.map((entry) => (
-                  <tr
-                    key={entry.id}
-                    className="border-b border-white/5 hover:bg-white/5 transition-colors group"
-                  >
-                    <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
-                      {new Date(entry.start_time).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 font-medium group-hover:text-primary transition-colors whitespace-nowrap">
-                      {entry.task_name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="w-2 h-2 rounded-full"
-                          style={{
-                            backgroundColor: entry.projects?.color || '#94a3b8',
-                          }}
-                        />
-                        {entry.projects?.name || t.common.noProject}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-right font-mono font-bold whitespace-nowrap">
-                      {formatDuration(
-                        new Date(entry.end_time!).getTime() -
-                          new Date(entry.start_time).getTime()
-                      )}
-                    </td>
-                  </tr>
-                ))}
-                {filteredEntries.length === 0 && (
-                  <tr>
-                    <td
-                      colSpan={4}
-                      className="px-6 py-20 text-center text-muted-foreground opacity-50"
-                    >
-                      <History className="w-12 h-12 mx-auto mb-4 opacity-5 mt-4" />
-                      {t.common.noData}
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+        <Card className="glass-card border-none overflow-hidden group hover:bg-white/5 transition-all sm:col-span-2 lg:col-span-1">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
+              {t.reports.avgTimePerTask}
+            </CardTitle>
+            <History className="h-4 w-4 text-primary/60" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl lg:text-4xl font-mono font-bold">
+              {formatDuration(avgTimePerTask)}
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              {filteredEntries.length > 0
+                ? `${filteredEntries.length} ${t.reports.completedTasks.toLowerCase()}`
+                : t.common.noData}
+            </p>
+          </CardContent>
         </Card>
       </div>
+
+      {/* Row 3: Charts — 2 equal columns */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <ReportsBarChart data={chartData} />
+        <ReportsPieChart data={chartData} totalTime={totalTime} />
+      </div>
+
+      {/* Row 4: Detailed Table — full width */}
+      <Card className="glass-card border-none overflow-hidden rounded-2xl">
+        <div className="overflow-x-auto max-h-[420px]">
+          <table className="w-full text-sm text-left">
+            <thead className="text-xs uppercase bg-white/5 text-muted-foreground sticky top-0 z-10 backdrop-blur-md">
+              <tr>
+                <th className="px-6 py-4 tracking-widest">
+                  {t.reports.table.date}
+                </th>
+                <th className="px-6 py-4 tracking-widest">
+                  {t.reports.table.task}
+                </th>
+                <th className="px-6 py-4 tracking-widest">
+                  {t.reports.table.project}
+                </th>
+                <th className="px-6 py-4 text-right tracking-widest">
+                  {t.reports.table.duration}
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {filteredEntries.map((entry) => (
+                <tr
+                  key={entry.id}
+                  className="border-b border-white/5 hover:bg-white/5 transition-colors group"
+                >
+                  <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                    {new Date(entry.start_time).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 font-medium group-hover:text-primary transition-colors whitespace-nowrap">
+                    {entry.task_name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-2 h-2 rounded-full"
+                        style={{
+                          backgroundColor: entry.projects?.color || '#94a3b8',
+                        }}
+                      />
+                      {entry.projects?.name || t.common.noProject}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-right font-mono font-bold whitespace-nowrap">
+                    {formatDuration(
+                      new Date(entry.end_time!).getTime() -
+                        new Date(entry.start_time).getTime()
+                    )}
+                  </td>
+                </tr>
+              ))}
+              {filteredEntries.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={4}
+                    className="px-6 py-20 text-center text-muted-foreground opacity-50"
+                  >
+                    <History className="w-12 h-12 mx-auto mb-4 opacity-5 mt-4" />
+                    {t.common.noData}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </Card>
     </motion.div>
   );
 }

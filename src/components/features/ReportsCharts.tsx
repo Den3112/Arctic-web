@@ -61,7 +61,7 @@ export function ReportsBarChart({ data }: ReportsChartsProps) {
   }));
 
   return (
-    <Card className="glass-card border-none overflow-hidden h-[400px]">
+    <Card className="glass-card border-none overflow-hidden h-[420px]">
       <CardHeader>
         <CardTitle
           data-testid="time-distribution-bar-title"
@@ -71,7 +71,7 @@ export function ReportsBarChart({ data }: ReportsChartsProps) {
         </CardTitle>
       </CardHeader>
       <CardContent
-        className="h-[320px] w-full"
+        className="h-[340px] w-full"
         data-testid="time-distribution-chart"
       >
         <ResponsiveContainer width="100%" height="100%">
@@ -118,7 +118,7 @@ export function ReportsPieChart({
   if (data.length === 0) return null;
 
   return (
-    <Card className="glass-card border-none overflow-hidden h-[400px] md:h-[450px]">
+    <Card className="glass-card border-none overflow-hidden h-[420px]">
       <CardHeader>
         <CardTitle
           data-testid="time-distribution-pie-title"
@@ -127,7 +127,7 @@ export function ReportsPieChart({
           {t.reports.timeDistribution}
         </CardTitle>
       </CardHeader>
-      <CardContent className="h-[350px] md:h-[400px] relative">
+      <CardContent className="h-[340px] relative">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie

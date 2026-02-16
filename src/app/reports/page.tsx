@@ -15,7 +15,6 @@ export default async function ReportsPage() {
   }
 
   // Fetch all entries for the user
-  // Optimisation: We could fetch only necessary fields or limit by default to current month if volume is huge
   const { data: entries } = await supabase
     .from('time_entries')
     .select('*, projects(*)')
@@ -24,16 +23,7 @@ export default async function ReportsPage() {
     .order('start_time', { ascending: false });
 
   return (
-    <div className="max-w-6xl mx-auto py-8 space-y-8">
-      <div>
-        <h1 className="text-4xl font-bold tracking-tight premium-gradient-text uppercase">
-          Reports
-        </h1>
-        <p className="text-muted-foreground mt-2">
-          Analyze your productivity and export data.
-        </p>
-      </div>
-
+    <div className="max-w-6xl mx-auto py-8 space-y-6">
       <ReportsView entries={entries || []} />
     </div>
   );

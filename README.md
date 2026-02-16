@@ -2,7 +2,7 @@
 
 [![Stack](https://img.shields.io/badge/Stack-Next.js_16_|_Supabase-black?style=for-the-badge)](https://nextjs.org/)
 
-**Test Task Submission** | [Prompts Log](PROMPTS.md) | [Live Demo](https://arctic-web-solutions.vercel.app/)
+**Test Task Submission** | [Prompts & AI Log](PROMPTS.md) | [Live Demo](https://arctic-web-solutions.vercel.app/)
 
 Advanced time tracking application built with Clean Architecture, Next.js 16, and Supabase.
 
@@ -20,21 +20,10 @@ Advanced time tracking application built with Clean Architecture, Next.js 16, an
 
 - **Framework**: [Next.js 16 (App Router)](https://nextjs.org/)
 - **Database**: [Supabase (PostgreSQL)](https://supabase.com/)
-- **Styling**: Vanilla CSS & TailwindCSS (Selection: OKLCH support)
-- **Formatting**: [Prettier](https://prettier.io/)
+- **Styling**: TailwindCSS 4
 - **State Management**: Server Actions & React Hooks
 - **Testing**: Vitest (Unit) & Playwright (E2E)
 - **Icons**: Lucide React
-
-## 💎 Repository Standards
-
-This project follows world-class development standards to ensure code quality and consistency:
-
-- **Pre-commit Hooks**: Powered by [Husky](https://typicode.github.io/husky/) and [lint-staged](https://github.com/okonet/lint-staged).
-- **Automated Formatting**: Ensured by [Prettier](https://prettier.io/) before every commit.
-- **Continuous Integration**: GitHub Actions verify every PR with parallel jobs for Lint, Type-check, and Build.
-- **Dependency Management**: [Dependabot](https://github.com/dependabot) ensures all libraries are up-to-date.
-- **Maintenance**: Automated stale issue management for a healthy backlog.
 
 ## 📦 Project Structure
 
@@ -44,51 +33,136 @@ src/
 ├── components/      # UI components (layout, sections, ui, features)
 ├── services/        # Business logic & Data access layer
 ├── hooks/           # Custom reusable React logic
-├── locales/         # Translation dictionaries
-└── lib/             # Third-party configurations
+├── locales/         # Translation dictionaries (en, uk)
+└── lib/             # Third-party configurations (Supabase client)
+supabase/
+└── migrations/      # SQL migration files (run in order)
+scripts/
+└── setup.ts         # Automated setup script
 tests/
 ├── e2e/             # Playwright E2E tests
 └── unit/            # Vitest unit tests
 ```
 
-## 🏗 Setup & Onboarding
+---
 
-1. **Clone the repository**:
+## 🏗 Local Setup (Step by Step)
 
-   ```bash
-   git clone https://github.com/Den3112/Arctic-web.git
-   cd Arctic-web
-   ```
+### Prerequisites
 
-2. **Install dependencies**:
+- **Node.js** 18+ ([download](https://nodejs.org/))
+- **npm** (comes with Node.js)
+- **Supabase account** — free at [supabase.com](https://supabase.com/)
 
-   ```bash
-   npm install
-   ```
+### Step 1: Clone the repository
 
-3. **Run Onboarding Script**:
-   This script verifies your environment, sets up `.env.local`, and runs initial checks.
+```bash
+git clone https://github.com/Den3112/Arctic-web.git
+cd Arctic-web
+```
 
-   ```bash
-   npm run setup
-   ```
+### Step 2: Install dependencies
 
-4. **Fill in Credentials**:
-   Edit `.env.local` and add your `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+```bash
+npm install
+```
 
-5. **Run development server**:
-   ```bash
-   npm run dev
-   ```
+### Step 3: Create a Supabase project
+
+1. Go to [supabase.com/dashboard](https://supabase.com/dashboard)
+2. Click **"New Project"**
+3. Choose a name (e.g. `arctictime`), set a database password, select a region
+4. Wait ~2 minutes for the project to initialize
+
+### Step 4: Apply database schema
+
+Run all 3 migration files **in order** via the Supabase SQL Editor:
+
+1. Go to your project → **SQL Editor** → click **"New query"**
+2. Copy & paste the contents of each file, then click **"Run"**:
+
+| Order | File                                               | What it does                                                                |
+| ----- | -------------------------------------------------- | --------------------------------------------------------------------------- |
+| 1     | `supabase/migrations/20260213_initial_schema.sql`  | Tables (`profiles`, `projects`, `time_entries`), RLS policies, auth trigger |
+| 2     | `supabase/migrations/20260214_optimize_schema.sql` | Indexes for performance, time constraint                                    |
+| 3     | `supabase/migrations/20260215_world_class_db.sql`  | Soft deletes, `updated_at` triggers, `user_settings` table, analytics view  |
+
+> **Tip:** You can also run all 3 files in one query by pasting them sequentially.
+
+### Step 5: Configure environment variables
+
+```bash
+cp .env.example .env.local
+```
+
+Open `.env.local` and fill in your Supabase credentials:
+
+```bash
+# Get these from: Supabase Dashboard → Your Project → Settings → API
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co    # Project URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGci...              # anon / public key
+```
+
+**Where to find the keys:**
+
+1. Go to [supabase.com/dashboard](https://supabase.com/dashboard)
+2. Select your project → **Settings** → **API**
+3. Copy **Project URL** → paste as `NEXT_PUBLIC_SUPABASE_URL`
+4. Copy **anon public** key → paste as `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+### Step 6: Run the application
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+🎉 **Done!** Create an account and start tracking time.
+
+---
 
 ## 🧪 Testing
 
-We value quality. Run our test suites to ensure stability:
+```bash
+# Unit tests (Vitest)
+npm run test
 
-- **Unit Tests**: `npm run test`
-- **E2E Tests**: `npm run test:e2e`
+# E2E tests (Playwright) — requires dev server running
+npm run test:e2e
 
-## 🚀 Deployment
+# Full validation (lint + type-check + format + tests)
+npm run validate
+```
+
+## 🔨 Production Build
+
+```bash
+# Build the production bundle
+npm run build
+
+# Start the production server
+npm run start
+```
+
+The app will be available at [http://localhost:3000](http://localhost:3000).
+
+## 📝 Available Scripts
+
+| Script             | Description                               |
+| ------------------ | ----------------------------------------- |
+| `npm run dev`      | Start development server                  |
+| `npm run build`    | Run validation + production build         |
+| `npm run start`    | Start production server                   |
+| `npm run lint`     | Run ESLint                                |
+| `npm run format`   | Format code with Prettier                 |
+| `npm run test`     | Run unit tests (Vitest)                   |
+| `npm run test:e2e` | Run E2E tests (Playwright)                |
+| `npm run validate` | Full check: lint + types + format + tests |
+| `npm run setup`    | Automated onboarding script               |
+| `npm run clean`    | Remove build artifacts                    |
+
+## 🚀 Deployment (Vercel)
 
 ### Deploy to Vercel
 
@@ -110,6 +184,14 @@ We value quality. Run our test suites to ensure stability:
    Click "Deploy". Vercel will automatically detect the Next.js framework and build your application.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FDen3112%2FArctic-web)
+
+---
+
+## 💎 Repository Standards
+
+- **Pre-commit Hooks**: Powered by [Husky](https://typicode.github.io/husky/) and [lint-staged](https://github.com/okonet/lint-staged).
+- **Automated Formatting**: Ensured by [Prettier](https://prettier.io/) before every commit.
+- **Continuous Integration**: GitHub Actions verify every PR with parallel jobs for Lint, Type-check, and Build.
 
 ---
 

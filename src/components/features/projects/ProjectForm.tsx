@@ -86,7 +86,7 @@ export function ProjectForm({ open, onOpenChange, project }: ProjectFormProps) {
       }
       onOpenChange(false);
       router.refresh();
-    } catch (error) {
+    } catch {
       toast.error(
         project ? t.projects.toastUpdateError : t.projects.toastError
       );

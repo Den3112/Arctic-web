@@ -123,7 +123,7 @@ export const en = {
     thisMonth: 'This month',
     totalTime: 'Total Time',
     totalTasks: 'Total Tasks',
-    entriesCount: 'Entries for period',
+    avgTimePerTask: 'Avg Time per Task',
     timeDistribution: 'Time Distribution',
     timeByProject: 'Time by Project',
     completedTasks: 'Completed Tasks',
