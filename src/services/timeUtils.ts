@@ -1,4 +1,5 @@
 export function formatDuration(ms: number): string {
+  if (ms < 0) ms = 0;
   const seconds = Math.floor((ms / 1000) % 60);
   const minutes = Math.floor((ms / (1000 * 60)) % 60);
   const hours = Math.floor(ms / (1000 * 60 * 60));
@@ -23,6 +24,8 @@ export function calculateDurationMs(
 ): number {
   const startTime = new Date(start).getTime();
   const endTime = end ? new Date(end).getTime() : Date.now();
+  // Handle invalid dates or future start times
+  if (isNaN(startTime) || isNaN(endTime)) return 0;
   return Math.max(0, endTime - startTime);
 }
 

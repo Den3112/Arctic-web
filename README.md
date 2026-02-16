@@ -18,7 +18,7 @@ Advanced time tracking application built with Clean Architecture, Next.js 16, an
 
 ## 🛠 Tech Stack
 
-- **Framework**: [Next.js 15 (App Router)](https://nextjs.org/)
+- **Framework**: [Next.js 16 (App Router)](https://nextjs.org/)
 - **Database**: [Supabase (PostgreSQL)](https://supabase.com/)
 - **Styling**: Vanilla CSS & TailwindCSS (Selection: OKLCH support)
 - **Formatting**: [Prettier](https://prettier.io/)

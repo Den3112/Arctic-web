@@ -232,7 +232,7 @@ export function Navbar() {
             animate={{ height: 'calc(100vh - 64px)', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="md:hidden border-t border-white/10 bg-background/95 backdrop-blur-xl overflow-hidden fixed left-0 right-0 top-[64px] bottom-0 z-[100]"
+            className="md:hidden border-t border-white/10 bg-background/95 backdrop-blur-xl overflow-hidden fixed left-0 right-0 top-[64px] bottom-0 z-100"
             id="mobile-menu"
             data-testid="mobile-menu-overlay"
           >
@@ -340,7 +340,7 @@ export function Navbar() {
       </AnimatePresence>
 
       {/* Mobile Active Timer Banner - Fixed at bottom for easier reach - Only show on very small screens or as needed */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] pointer-events-none">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-100 pointer-events-none">
         <div className="pointer-events-auto">
           <ActiveTimerBanner />
         </div>

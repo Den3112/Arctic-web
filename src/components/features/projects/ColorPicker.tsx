@@ -56,7 +56,7 @@ export function ColorPicker({ value, onChange }: ColorPickerProps) {
           </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-64 p-2">
+      <PopoverContent className="w-64 p-2 z-300">
         <div className="grid grid-cols-5 gap-2">
           {COLORS.map((color) => (
             <button
