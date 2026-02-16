@@ -14,16 +14,15 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
 );
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocale] = useState<Locale>(() => {
-    if (typeof window === 'undefined') return 'en';
-    const saved = localStorage.getItem('locale') as Locale;
-    if (saved && (saved === 'en' || saved === 'uk')) return saved;
-    return 'en';
-  });
+  const [locale, setLocale] = useState<Locale>('en');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true); // eslint-disable-line react-hooks/set-state-in-effect
+    const saved = localStorage.getItem('locale') as Locale;
+    if (saved && (saved === 'en' || saved === 'uk')) {
+      setLocale(saved); // eslint-disable-line react-hooks/set-state-in-effect
+    }
+    setMounted(true);
   }, []);
 
   const handleSetLocale = (newLocale: Locale) => {
