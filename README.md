@@ -2,7 +2,7 @@
 
 [![Stack](https://img.shields.io/badge/Stack-Next.js_16_|_Supabase-black?style=for-the-badge)](https://nextjs.org/)
 
-**Test Task Submission** | [Prompts Log](PROMPTS.md)
+**Test Task Submission** | [Prompts Log](PROMPTS.md) | [Live Demo](https://arctic-web-solutions.vercel.app/)
 
 Advanced time tracking application built with Clean Architecture, Next.js 16, and Supabase.
 
