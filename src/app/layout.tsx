@@ -8,6 +8,7 @@ import { LanguageProvider } from '@/contexts/LanguageContext';
 import { TimerProvider } from '@/contexts/TimerContext';
 import { getActiveEntry } from '@/actions/time-entries';
 import { PageTransition } from '@/components/layout/PageTransition';
+import { Analytics } from '@vercel/analytics/next';
 
 const bodyFont = Outfit({
   subsets: ['latin'],
@@ -95,6 +96,7 @@ export default async function RootLayout({
           </TimerProvider>
           <Toaster position="top-center" />
         </LanguageProvider>
+        <Analytics />
       </body>
     </html>
   );
