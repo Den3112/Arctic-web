@@ -1,0 +1,15 @@
+.next
+out
+build
+coverage
+.agent
+.gemini
+node_modules
+public/data
+*.ico
+*.png
+*.svg
+*.jpg
+*.jpeg
+*.gif
+*.webp
