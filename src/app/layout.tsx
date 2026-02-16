@@ -8,6 +8,7 @@ import { LanguageProvider } from '@/contexts/LanguageContext';
 import { TimerProvider } from '@/contexts/TimerContext';
 import { getActiveEntry } from '@/actions/time-entries';
 import { PageTransition } from '@/components/layout/PageTransition';
+import { Analytics } from '@vercel/analytics/next';
 
 const bodyFont = Outfit({
   subsets: ['latin'],
@@ -59,7 +60,6 @@ export const metadata: Metadata = {
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  // maximumScale: 1, // Removed to improve accessibility (allow zooming)
 };
 
 export default async function RootLayout({
@@ -81,8 +81,6 @@ export default async function RootLayout({
       <body
         className={`${bodyFont.variable} ${displayFont.variable} font-sans antialiased min-h-screen bg-background text-foreground`}
       >
-        {/* Elite Background Atmosphere is now handled via CSS only */}
-
         <LanguageProvider>
           <TimerProvider initialActiveEntry={activeEntry}>
             <div className="relative flex min-h-screen flex-col">
@@ -94,6 +92,7 @@ export default async function RootLayout({
             </div>
           </TimerProvider>
           <Toaster position="top-center" />
+          <Analytics />
         </LanguageProvider>
       </body>
     </html>
