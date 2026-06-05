@@ -1,13 +1,7 @@
 # Security Policy
 
-## Supported Versions
-
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.1.x   | :white_check_mark: |
-
 ## Reporting a Vulnerability
 
-We take the security of ArcticTime seriously. If you believe you have found a security vulnerability, please do NOT open a public issue. Instead, please report it via [Method of reporting, e.g., email or security platform].
+If you discover a security vulnerability within this repository, please do **NOT** open a public issue. Instead, report it directly to the owner via email: **denis.kushnirenko.dev@gmail.com**.
 
-We will acknowledge your report within 48 hours and provide a timeline for a fix.
+All security vulnerability reports will receive a prompt response.
