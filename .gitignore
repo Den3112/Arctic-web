@@ -65,3 +65,6 @@ Thumbs.db
 .project
 .classpath
 .settings/
+
+# Added during automated cleanup
+node_modules/
